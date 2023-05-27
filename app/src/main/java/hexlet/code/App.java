@@ -5,7 +5,7 @@ class App {
         System.out.println("Hello!");
     }
 
-    public static String TestMethod() {
+    public static String testMethod() {
         return "String for test";
     }
 }
