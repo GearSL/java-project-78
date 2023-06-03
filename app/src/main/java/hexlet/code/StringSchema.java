@@ -3,7 +3,7 @@ package hexlet.code;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StringSchema {
+public class StringSchema extends BaseSchema {
     private boolean isValid = true;
     private boolean required = false;
     private int minLength = 0;
@@ -24,6 +24,7 @@ public class StringSchema {
         return this;
     }
 
+    @Override
     public boolean isValid(Object value) {
         checkRequired(value);
         checkMinLength(value);
