@@ -9,20 +9,35 @@ class App {
 
         MapSchema schema = v.map();
 
-        System.out.println("TRUE: " + schema.isValid(null)); // true
+// shape позволяет описывать валидацию для значений объекта Map по ключам
+        Map<String, BaseSchema> schemas = new HashMap<>();
 
-        schema.required();
+// Определяем схемы валидации для значений свойств "name" и "age"
+// Имя должно быть строкой, обязательно для заполнения
+        schemas.put("name", v.string().required());
+// Возраст должен быть положительным числом
+        schemas.put("age", v.number().positive());
+        schema.shape(schemas);
 
-        System.out.println("FALSE: " + schema.isValid(null)); // false
-        System.out.println("TRUE: " + schema.isValid(new HashMap())); // true
-        Map<String, String> data = new HashMap<>();
-        data.put("key1", "value1");
-        schema.isValid(data); // true
+// Проверяем объекты
+        Map<String, Object> human1 = new HashMap<>();
+        human1.put("name", "Kolya");
+        human1.put("age", 100);
+        System.out.println("TRUE: " + schema.isValid(human1)); // true
 
-        schema.sizeof(2);
+        Map<String, Object> human2 = new HashMap<>();
+        human2.put("name", "Maya");
+        human2.put("age", null);
+        System.out.println("TRUE: " + schema.isValid(human2)); // true
 
-        System.out.println("FALSE: " + schema.isValid(data));  // false
-        data.put("key2", "value2");
-        System.out.println("TRUE: " + schema.isValid(data)); // true
+        Map<String, Object> human3 = new HashMap<>();
+        human3.put("name", "");
+        human3.put("age", null);
+        System.out.println("FALSE: " + schema.isValid(human3)); // false
+
+        Map<String, Object> human4 = new HashMap<>();
+        human4.put("name", "Valya");
+        human4.put("age", -5);
+        System.out.println("FALSE: " + schema.isValid(human4)); // false
     }
 }
