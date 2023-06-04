@@ -38,6 +38,18 @@ public class StringSchemaTest {
         stringSchema.contains("wh");
         Assertions.assertEquals(expect, stringSchema.isValid(""));
         Assertions.assertEquals(expect, stringSchema.isValid(null));
-        Assertions.assertEquals(expect, stringSchema.isValid(testString));
+    }
+
+    @Test
+    public void stringSchemaMinLength() {
+        boolean expectTrue = true;
+        boolean expectFalse = false;
+
+        stringSchema.required();
+        stringSchema.minLength(7);
+        stringSchema.contains("whatthe");
+
+        Assertions.assertEquals(expectFalse, stringSchema.isValid("what does the fox say"));
+        Assertions.assertEquals(expectFalse, stringSchema.isValid("hexlet"));
     }
 }

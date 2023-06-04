@@ -64,10 +64,8 @@ public class MapSchema extends BaseSchema {
             if (!schemaMap.get(entry.getKey()).isValid(entry.getValue())) {
                 isValid = false;
             }
-
-            return isValid;
         }
 
-        return true;
+        return isValid;
     }
 }
