@@ -2,12 +2,12 @@ package hexlet.code.schemas;
 
 import java.util.Map;
 
-public class MapSchema extends BaseSchema {
+public final class MapSchema extends BaseSchema {
     private boolean isRequired = false;
     private int size = 0;
     private boolean isShape = false;
 
-    Map<String, BaseSchema> schemaMap;
+    private Map<String, BaseSchema> schemaMap;
 
     public MapSchema required() {
         isRequired = true;

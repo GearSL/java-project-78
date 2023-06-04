@@ -1,9 +1,9 @@
 package hexlet.code.schemas;
 
-public class StringSchema extends BaseSchema {
+public final class StringSchema extends BaseSchema {
     private boolean isRequired = false;
     private int minLength = 0;
-    String substring = "";
+    private String substring = "";
 
     public StringSchema required() {
         this.isRequired = true;
