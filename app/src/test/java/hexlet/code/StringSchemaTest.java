@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class StringSchemaTest {
-    StringSchema stringSchema;
+public final class StringSchemaTest {
+    private StringSchema stringSchema;
 
     @BeforeEach
     public void init() {
