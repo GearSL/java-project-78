@@ -19,43 +19,35 @@ public final class MapSchemaTest {
     }
 
     @Test
-    public void mapSchemaWithoutConfiguration() {
-        boolean expected = true;
-        Assertions.assertEquals(expected, schema.isValid(null));
+    public void mapSchemaWithoutConfigurationTest() {
+        Assertions.assertTrue(schema.isValid(null));
     }
 
     @Test
-    public void mapSchemaRequired() {
-        boolean expectedTrue = true;
-        boolean expectedFalse = false;
+    public void mapSchemaRequiredTest() {
         schema.required();
-        Assertions.assertEquals(expectedFalse, schema.isValid(null));
-        Assertions.assertEquals(expectedTrue, schema.isValid(new HashMap()));
+
+        Assertions.assertFalse(schema.isValid(null));
+        Assertions.assertTrue(schema.isValid(new HashMap()));
     }
 
     @Test
-    public void mapSchemaSizeOf() {
-        boolean expectedTrue = true;
-        boolean expectedFalse = false;
+    public void mapSchemaSizeOfTest() {
         schema.required();
         Map<String, String> data = new HashMap<>();
 
         data.put("key1", "value1");
-        Assertions.assertEquals(expectedTrue, schema.isValid(data));
+        Assertions.assertTrue(schema.isValid(data));
 
         schema.sizeof(2);
-        Assertions.assertEquals(expectedFalse, schema.isValid(data));
+        Assertions.assertFalse(schema.isValid(data));
 
         data.put("key2", "value2");
-        Assertions.assertEquals(expectedTrue, schema.isValid(data));
+        Assertions.assertTrue(schema.isValid(data));
     }
 
     @Test
     public void mapSchemasTest() {
-        boolean expectedTrue = true;
-        boolean expectedFalse = false;
-
-
         Validator v = new Validator();
         schema = v.map();
         Map<String, BaseSchema> schemas = new HashMap<>();
@@ -66,22 +58,22 @@ public final class MapSchemaTest {
         Map<String, Object> human1 = new HashMap<>();
         human1.put("name", "Kolya");
         human1.put("age", 100);
-        Assertions.assertEquals(expectedTrue, schema.isValid(human1)); // true
+        Assertions.assertTrue(schema.isValid(human1));
 
         Map<String, Object> human2 = new HashMap<>();
         human2.put("name", "Maya");
         human2.put("age", null);
-        Assertions.assertEquals(expectedTrue, schema.isValid(human2)); // true
+        Assertions.assertTrue(schema.isValid(human2));
 
         Map<String, Object> human3 = new HashMap<>();
         human3.put("name", "");
         human3.put("age", null);
-        Assertions.assertEquals(expectedFalse, schema.isValid(human3)); // false
+        Assertions.assertFalse(schema.isValid(human3));
 
         Map<String, Object> human4 = new HashMap<>();
         human4.put("name", "Valya");
         human4.put("age", -5);
-        Assertions.assertEquals(expectedFalse, schema.isValid(human4)); // false
+        Assertions.assertFalse(schema.isValid(human4));
     }
 
 }

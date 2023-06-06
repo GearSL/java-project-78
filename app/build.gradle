@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'checkstyle'
     id 'jacoco'
+    id 'distribution'
     id 'com.adarshr.test-logger' version '3.2.0'
 }
 

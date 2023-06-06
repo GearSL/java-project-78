@@ -16,40 +16,37 @@ public final class StringSchemaTest {
 
     @Test
     public void stringSchemaWithoutConfigurationTest() {
-        boolean expect = true;
-        Assertions.assertEquals(expect, stringSchema.isValid(""));
-        Assertions.assertEquals(expect, stringSchema.isValid(null));
+        Assertions.assertTrue(stringSchema.isValid(""));
+        Assertions.assertTrue(stringSchema.isValid(null));
     }
 
     @Test
     public void stringSchemaRequiredTest() {
-        boolean expect = false;
         stringSchema.required();
-        Assertions.assertEquals(expect, stringSchema.isValid(""));
-        Assertions.assertEquals(expect, stringSchema.isValid(null));
-        Assertions.assertEquals(expect, stringSchema.isValid(5));
+
+        Assertions.assertFalse(stringSchema.isValid(""));
+        Assertions.assertFalse(stringSchema.isValid(null));
+        Assertions.assertFalse(stringSchema.isValid(5));
     }
 
     @Test
-    public void stringSchemaEmptyContainsTest() {
-        boolean expect = false;
-        String testString = "what does the fox say";
+    public void stringSchemaContainsTest() {
         stringSchema.required();
         stringSchema.contains("wh");
-        Assertions.assertEquals(expect, stringSchema.isValid(""));
-        Assertions.assertEquals(expect, stringSchema.isValid(null));
+
+        Assertions.assertFalse(stringSchema.isValid(""));
+        Assertions.assertFalse(stringSchema.isValid(null));
+        Assertions.assertTrue(stringSchema.isValid("what does the fox say"));
     }
 
     @Test
-    public void stringSchemaMinLength() {
-        boolean expectTrue = true;
-        boolean expectFalse = false;
-
+    public void stringSchemaMinLengthTest() {
         stringSchema.required();
         stringSchema.minLength(7);
         stringSchema.contains("whatthe");
 
-        Assertions.assertEquals(expectFalse, stringSchema.isValid("what does the fox say"));
-        Assertions.assertEquals(expectFalse, stringSchema.isValid("hexlet"));
+        Assertions.assertFalse(stringSchema.isValid("what does the fox say"));
+        Assertions.assertFalse(stringSchema.isValid("hexlet"));
+        Assertions.assertTrue(stringSchema.isValid("whatthe smth"));
     }
 }

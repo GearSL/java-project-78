@@ -1,71 +1,47 @@
 package hexlet.code.schemas;
 
 import java.util.Map;
+import java.util.Objects;
 
 public final class MapSchema extends BaseSchema {
-    private boolean isRequired = false;
-    private int size = 0;
-    private boolean isShape = false;
-
-    private Map<String, BaseSchema> schemaMap;
 
     public MapSchema required() {
-        isRequired = true;
+        addCheck(
+                "required",
+                Objects::nonNull
+        );
         return this;
     }
 
     public MapSchema sizeof(int length) {
-        this.size = length;
+        addCheck(
+                "sizeOf",
+                value -> {
+                    Map<String, Object> convertedValue = (Map<String, Object>) value;
+                    if (length > 0) {
+                        return convertedValue.size() == length;
+                    } else {
+                        return true;
+                    }
+                }
+        );
         return this;
     }
 
     public MapSchema shape(Map<String, BaseSchema> schemas) {
-        schemaMap = schemas;
-        isShape = true;
+        addCheck(
+                "shape",
+                value -> {
+                    boolean isValid = true;
+                    Map<String, BaseSchema> objectMap = (Map<String, BaseSchema>) value;
+                    for (Map.Entry entry : objectMap.entrySet()) {
+                        if (!schemas.get(entry.getKey()).isValid(entry.getValue())) {
+                            isValid = false;
+                        }
+                    }
+                    return isValid;
+                }
+        );
         return this;
-    }
-
-    @Override
-    public boolean isValid(Object value) {
-        boolean checkRequired = checkRequired(value);
-        boolean checkSize = checkSize(value);
-        boolean shape = checkShape(value);
-
-        checkShape(value);
-
-        return checkRequired && checkSize && shape;
-    }
-
-    private boolean checkRequired(Object value) {
-        if (isRequired && value != null) {
-            return true;
-        } else {
-            return !isRequired;
-        }
-    }
-
-    private boolean checkSize(Object value) {
-        Map<String, Object> convertedValue = (Map<String, Object>) value;
-        if (size > 0) {
-            return convertedValue.size() == size;
-        } else {
-            return true;
-        }
-    }
-
-    private boolean checkShape(Object value) {
-        if (!isShape) {
-            return true;
-        }
-
-        boolean isValid = true;
-        Map<String, BaseSchema> objectMap = (Map<String, BaseSchema>) value;
-        for (Map.Entry entry : objectMap.entrySet()) {
-            if (!schemaMap.get(entry.getKey()).isValid(entry.getValue())) {
-                isValid = false;
-            }
-        }
-
-        return isValid;
     }
 }

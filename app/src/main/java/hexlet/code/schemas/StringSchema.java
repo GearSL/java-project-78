@@ -1,54 +1,47 @@
 package hexlet.code.schemas;
 
 public final class StringSchema extends BaseSchema {
-    private boolean isRequired = false;
-    private int minLength = 0;
-    private String substring = "";
 
     public StringSchema required() {
-        this.isRequired = true;
+        addCheck(
+                "required",
+                value -> {
+                    if (!(value instanceof String)) {
+                        return false;
+                    } else {
+                        return !value.equals("");
+                    }
+                }
+        );
         return this;
     }
 
     public StringSchema minLength(int length) {
-        this.minLength = length;
+        addCheck(
+                "minLength",
+                value -> {
+                    if (!(value instanceof String) && length == 0) {
+                        return true;
+                    } else {
+                        return value.toString().length() >= length;
+                    }
+                }
+        );
         return this;
     }
 
-    public StringSchema contains(String value) {
-        this.substring = value;
+    public StringSchema contains(String string) {
+        addCheck(
+                "contains",
+                value -> {
+                    if (string.equals("")) {
+                        return true;
+                    } else if (value == null) {
+                        return false;
+                    }
+                    return value.toString().contains(string);
+                }
+        );
         return this;
-    }
-
-    @Override
-    public boolean isValid(Object value) {
-        return checkRequired(value) && checkMinLength(value) && checkSubstring(value);
-    }
-
-    private boolean checkRequired(Object value) {
-        if (isRequired && !(value instanceof String)) {
-            return false;
-        } else if (isRequired && value.equals("")) {
-            return false;
-        }
-        return true;
-    }
-
-    private boolean checkMinLength(Object value) {
-        if (!(value instanceof String) && minLength == 0) {
-            return true;
-        } else if (value.toString().length() < this.minLength) {
-            return false;
-        }
-        return true;
-    }
-
-    private boolean checkSubstring(Object value) {
-        if (substring.equals("")) {
-            return true;
-        } else if (value == null) {
-            return false;
-        }
-        return value.toString().contains(substring);
     }
 }

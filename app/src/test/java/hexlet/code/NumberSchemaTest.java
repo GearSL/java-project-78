@@ -15,22 +15,43 @@ public final class NumberSchemaTest {
     }
 
     @Test
-    public void numberSchemaWithoutConfiguration() {
-        boolean expected = true;
-        Assertions.assertEquals(expected, schema.isValid(null));
-        Assertions.assertEquals(expected, schema.isValid(5));
-        schema.positive();
-        Assertions.assertEquals(expected, schema.isValid(null));
-
+    public void numberSchemaWithoutConfigurationTest() {
+        Assertions.assertTrue(schema.isValid(null));
+        Assertions.assertTrue(schema.isValid(5));
+        Assertions.assertTrue(schema.isValid(-5));
     }
 
     @Test
-    public void numberSchemaPositive() {
-        boolean expectedTrue = true;
-        boolean expectedFalse = false;
+    public void numberSchemaPositiveTest() {
         schema.positive();
-        Assertions.assertEquals(expectedTrue, schema.isValid(null));
-        Assertions.assertEquals(expectedTrue, schema.isValid(5));
-        Assertions.assertEquals(expectedFalse, schema.isValid(-5));
+
+        Assertions.assertTrue(schema.isValid(null));
+        Assertions.assertTrue(schema.isValid(5));
+        Assertions.assertFalse(schema.isValid(-5));
+    }
+
+    @Test
+    public void numberSchemaRequiredTest() {
+        schema.positive();
+        schema.required();
+
+        Assertions.assertTrue(schema.isValid(10));
+        Assertions.assertFalse(schema.isValid(null));
+        Assertions.assertFalse(schema.isValid("5"));
+        Assertions.assertFalse(schema.isValid(-10));
+        //  Ноль — не положительное число
+        Assertions.assertFalse(schema.isValid(0));
+    }
+
+    @Test
+    public void numberSchemaRangeTest() {
+        schema.positive();
+        schema.required();
+        schema.range(5, 10);
+
+        Assertions.assertTrue(schema.isValid(5));
+        Assertions.assertTrue(schema.isValid(10));
+        Assertions.assertFalse(schema.isValid(4));
+        Assertions.assertFalse(schema.isValid(11));
     }
 }
